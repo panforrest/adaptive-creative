@@ -117,21 +117,22 @@ export async function POST(request: NextRequest) {
       console.log("TwelveLabs API key not set, returning mock data for:", videoUrl);
       
       // Generate different mock text based on URL
+      const url = videoUrl.toLowerCase();
       let mockText = "You can't stop us. Together we rise. This is more than sport. This is unity.";
       
-      if (videoUrl.includes("apple") || videoUrl.toLowerCase().includes("iphone")) {
+      if (url.includes("apple") || url.includes("iphone")) {
         mockText = "Think different. Innovation that changes everything. The future is here.";
-      } else if (videoUrl.includes("coca") || videoUrl.includes("coke")) {
+      } else if (url.includes("coca") || url.includes("coke")) {
         mockText = "Taste the feeling. Open happiness. Share a Coke with the world.";
-      } else if (videoUrl.includes("pepsi")) {
+      } else if (url.includes("pepsi")) {
         mockText = "For the love of it. That's what I like. Pepsi generation.";
-      } else if (videoUrl.includes("adidas")) {
+      } else if (url.includes("adidas")) {
         mockText = "Impossible is nothing. All in or nothing. Create the new.";
-      } else if (videoUrl.includes("mcdon")) {
+      } else if (url.includes("mcdon")) {
         mockText = "I'm lovin' it. Good times great taste. You deserve a break today.";
-      } else if (videoUrl.includes("toyota")) {
+      } else if (url.includes("toyota")) {
         mockText = "Let's go places. Built for the way you live. The best built cars in the world.";
-      } else if (videoUrl.includes("samsung")) {
+      } else if (url.includes("samsung")) {
         mockText = "Do what you can't. Next is now. Designed for humans.";
       }
       
@@ -237,21 +238,26 @@ export async function POST(request: NextRequest) {
             },
           ],
           voiceover: {
-            text: videoUrl.includes("apple") || videoUrl.toLowerCase().includes("iphone")
-              ? "Think different. Innovation that changes everything. The future is here."
-              : videoUrl.includes("coca") || videoUrl.includes("coke")
-              ? "Taste the feeling. Open happiness. Share a Coke with the world."
-              : videoUrl.includes("pepsi")
-              ? "For the love of it. That's what I like. Pepsi generation."
-              : videoUrl.includes("adidas")
-              ? "Impossible is nothing. All in or nothing. Create the new."
-              : videoUrl.includes("mcdon")
-              ? "I'm lovin' it. Good times great taste. You deserve a break today."
-              : videoUrl.includes("toyota")
-              ? "Let's go places. Built for the way you live. The best built cars in the world."
-              : videoUrl.includes("samsung")
-              ? "Do what you can't. Next is now. Designed for humans."
-              : "You can't stop us. Together we rise. This is more than sport. This is unity.",
+            text: (() => {
+              const url = videoUrl.toLowerCase();
+              if (url.includes("apple") || url.includes("iphone")) {
+                return "Think different. Innovation that changes everything. The future is here.";
+              } else if (url.includes("coca") || url.includes("coke")) {
+                return "Taste the feeling. Open happiness. Share a Coke with the world.";
+              } else if (url.includes("pepsi")) {
+                return "For the love of it. That's what I like. Pepsi generation.";
+              } else if (url.includes("adidas")) {
+                return "Impossible is nothing. All in or nothing. Create the new.";
+              } else if (url.includes("mcdon")) {
+                return "I'm lovin' it. Good times great taste. You deserve a break today.";
+              } else if (url.includes("toyota")) {
+                return "Let's go places. Built for the way you live. The best built cars in the world.";
+              } else if (url.includes("samsung")) {
+                return "Do what you can't. Next is now. Designed for humans.";
+              } else {
+                return "You can't stop us. Together we rise. This is more than sport. This is unity.";
+              }
+            })(),
             language: "en-US",
             emotion: "inspirational",
           },
