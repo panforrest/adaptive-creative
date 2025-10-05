@@ -283,7 +283,7 @@ export default function Dashboard({ videoUrl, onBack }: DashboardProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           marketCode,
-          originalText: "You can't stop us. Together we rise.",
+          originalText: analysis?.voiceover.text || "You can't stop us. Together we rise.",
         }),
       });
 
