@@ -3,6 +3,8 @@ import {AbsoluteFill, useCurrentFrame, interpolate, Sequence, Video, staticFile}
 import {AnimatedBackground} from './components/AnimatedBackground';
 import {CulturalOverlay} from './components/CulturalOverlay';
 import {AudioTrack} from './components/AudioTrack';
+import {BackgroundMusic} from './components/BackgroundMusic';
+import {VoiceoverTrack} from './components/VoiceoverTrack';
 
 interface MarketVariantProps {
   marketCode: string;
@@ -183,7 +185,9 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
         </div>
       </AbsoluteFill>
       
-      {/* Audio Track */}
+      {/* Audio Tracks */}
+      <BackgroundMusic marketCode={marketCode} />
+      <VoiceoverTrack marketCode={marketCode} text={originalText} />
       <AudioTrack marketCode={marketCode} />
     </AbsoluteFill>
   );
