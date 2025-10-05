@@ -22,7 +22,7 @@ export const VoiceoverTrack: React.FC<VoiceoverTrackProps> = ({marketCode, text}
     MX: 'voiceover/mexico-spanish.mp3',
   };
   
-  const hasVoiceover = false; // Set to true when voiceover files are generated
+  const hasVoiceover = true; // Enabled with ElevenLabs API key
   
   if (!hasVoiceover) {
     return null;
