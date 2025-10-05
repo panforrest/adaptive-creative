@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowLeft, Globe, Loader2, Download, Play, TrendingUp, Languages, Video } from "lucide-react";
+import { ArrowLeft, Globe, Loader2, Download, Play, TrendingUp, Languages, Video, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -509,11 +509,16 @@ export default function Dashboard({ videoUrl, onBack }: DashboardProps) {
 
                 <Button
                   onClick={generateVariants}
-                  disabled={selectedMarkets.length === 0 || isGenerating}
+                  disabled={selectedMarkets.length === 0 || isGenerating || variants.length > 0}
                   className="w-full"
                   size="lg"
                 >
-                  {isGenerating ? (
+                  {variants.length > 0 ? (
+                    <>
+                      <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
+                      {variants.length} Variants Generated
+                    </>
+                  ) : isGenerating ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       Generating Variants...
@@ -521,7 +526,7 @@ export default function Dashboard({ videoUrl, onBack }: DashboardProps) {
                   ) : (
                     <>
                       <Globe className="w-4 h-4 mr-2" />
-                      Generate {selectedMarkets.length} Market Variants
+                      Generate {selectedMarkets.length} Market Variant{selectedMarkets.length !== 1 ? 's' : ''}
                     </>
                   )}
                 </Button>
