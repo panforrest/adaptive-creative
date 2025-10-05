@@ -1,5 +1,5 @@
 import React from 'react';
-import {Audio} from 'remotion';
+import {Audio, staticFile} from 'remotion';
 
 interface VoiceoverTrackProps {
   marketCode: string;
@@ -8,14 +8,20 @@ interface VoiceoverTrackProps {
 }
 
 export const VoiceoverTrack: React.FC<VoiceoverTrackProps> = ({marketCode, text, voiceoverUrl}) => {
-  // If voiceover URL is provided, use it
-  if (!voiceoverUrl) {
+  // Check if we should load voiceover
+  // Only enable for markets where we've generated audio
+  const hasVoiceover = voiceoverUrl || marketCode === 'JP';
+  
+  if (!hasVoiceover) {
     return null;
   }
   
+  // Use provided URL or construct from marketCode
+  const audioSrc = voiceoverUrl || staticFile(`voiceover/${marketCode}-voiceover.mp3`);
+  
   return (
     <Audio
-      src={voiceoverUrl}
+      src={audioSrc}
       volume={0.8}
       startFrom={0}
     />
