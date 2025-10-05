@@ -270,26 +270,45 @@ export default function Dashboard({ videoUrl, onBack }: DashboardProps) {
     return mods[marketCode] || ["Localized voiceover", "Cultural adaptation applied"];
   };
 
-  const handleDownloadVariant = (variant: MarketVariant) => {
-    // Create a JSON file with variant details for demo purposes
-    const variantData = {
-      market: variant.market,
-      modifications: variant.modifications,
-      persuasionScore: variant.persuasionScore,
-      status: variant.status,
-      generatedAt: new Date().toISOString(),
-      note: "This is a demo file. In production, this would be the actual video file with all modifications applied.",
-    };
+  const handleDownloadVariant = async (variant: MarketVariant, marketCode: string) => {
+    try {
+      // Show loading state
+      alert(`Rendering video for ${variant.market}... This will take 2-5 minutes. Check console for progress.`);
+      
+      console.log(`🎬 Requesting video render for ${variant.market} (${marketCode})`);
+      
+      // Call the render API
+      const response = await fetch("/api/render-video", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          marketCode,
+          originalText: "You can't stop us. Together we rise.",
+        }),
+      });
 
-    const blob = new Blob([JSON.stringify(variantData, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${variant.market.replace(/\s+/g, "_")}_variant.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+      if (!response.ok) {
+        throw new Error("Video rendering failed");
+      }
+
+      const data = await response.json();
+      console.log("✅ Video rendered:", data);
+
+      // Download the video
+      if (data.videoUrl) {
+        const link = document.createElement("a");
+        link.href = data.videoUrl;
+        link.download = `${variant.market.replace(/\s+/g, "_")}_variant.mp4`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        alert(`Video rendered successfully! Downloading ${variant.market} variant.`);
+      }
+    } catch (error) {
+      console.error("Error rendering video:", error);
+      alert("Failed to render video. Check console for details.");
+    }
   };
 
   if (isAnalyzing) {
@@ -569,10 +588,10 @@ export default function Dashboard({ videoUrl, onBack }: DashboardProps) {
                           <Button 
                             className="w-full" 
                             variant="outline"
-                            onClick={() => handleDownloadVariant(variant)}
+                            onClick={() => handleDownloadVariant(variant, selectedMarkets[idx])}
                           >
                             <Download className="w-4 h-4 mr-2" />
-                            Download Variant
+                            Render & Download Video
                           </Button>
                         </>
                       )}
