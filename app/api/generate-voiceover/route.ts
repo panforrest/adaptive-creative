@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
+import { existsSync } from "fs";
 import path from "path";
 
 // Market-specific language codes for ElevenLabs
@@ -82,13 +83,14 @@ export async function POST(request: NextRequest) {
 
     // Save audio file
     const audioBuffer = await response.arrayBuffer();
-    const audioPath = path.join(
-      process.cwd(),
-      "public",
-      "voiceover",
-      `${marketCode}-voiceover.mp3`
-    );
-
+    const voiceoverDir = path.join(process.cwd(), "public", "voiceover");
+    
+    // Ensure directory exists
+    if (!existsSync(voiceoverDir)) {
+      await mkdir(voiceoverDir, { recursive: true });
+    }
+    
+    const audioPath = path.join(voiceoverDir, `${marketCode}-voiceover.mp3`);
     await writeFile(audioPath, Buffer.from(audioBuffer));
 
     console.log(`   ✅ Voiceover saved: ${audioPath}`);
