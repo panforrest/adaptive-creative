@@ -116,24 +116,35 @@ export async function POST(request: NextRequest) {
     if (!process.env.TWELVELABS_API_KEY) {
       console.log("TwelveLabs API key not set, returning mock data for:", videoUrl);
       
-      // Generate different mock text based on URL
+      // Generate different mock text based on URL or video ID
       const url = videoUrl.toLowerCase();
+      console.log("🔍 Checking URL (lowercase):", url);
       let mockText = "You can't stop us. Together we rise. This is more than sport. This is unity.";
       
-      if (url.includes("apple") || url.includes("iphone")) {
+      // Check by brand name in URL
+      if (url.includes("apple") || url.includes("iphone") || url.includes("cbp2n1bqdyc")) {
         mockText = "Think different. Innovation that changes everything. The future is here.";
-      } else if (url.includes("coca") || url.includes("coke")) {
+        console.log("✅ Detected: Apple");
+      } else if (url.includes("coca") || url.includes("coke") || url.includes("5sdo4ymwvfq")) {
         mockText = "Taste the feeling. Open happiness. Share a Coke with the world.";
-      } else if (url.includes("pepsi")) {
+        console.log("✅ Detected: Coca-Cola");
+      } else if (url.includes("pepsi") || url.includes("po0jy4wvcic")) {
         mockText = "For the love of it. That's what I like. Pepsi generation.";
-      } else if (url.includes("adidas")) {
+        console.log("✅ Detected: Pepsi");
+      } else if (url.includes("adidas") || url.includes("lza-57h64ke")) {
         mockText = "Impossible is nothing. All in or nothing. Create the new.";
-      } else if (url.includes("mcdon")) {
+        console.log("✅ Detected: Adidas");
+      } else if (url.includes("mcdon") || url.includes("ewmashzewc")) {
         mockText = "I'm lovin' it. Good times great taste. You deserve a break today.";
-      } else if (url.includes("toyota")) {
+        console.log("✅ Detected: McDonald's");
+      } else if (url.includes("toyota") || url.includes("zswn")) {
         mockText = "Let's go places. Built for the way you live. The best built cars in the world.";
-      } else if (url.includes("samsung")) {
+        console.log("✅ Detected: Toyota");
+      } else if (url.includes("samsung") || url.includes("zi-pux4uaqm")) {
         mockText = "Do what you can't. Next is now. Designed for humans.";
+        console.log("✅ Detected: Samsung");
+      } else {
+        console.log("ℹ️ Using default: Nike");
       }
       
       return NextResponse.json({
@@ -240,19 +251,19 @@ export async function POST(request: NextRequest) {
           voiceover: {
             text: (() => {
               const url = videoUrl.toLowerCase();
-              if (url.includes("apple") || url.includes("iphone")) {
+              if (url.includes("apple") || url.includes("iphone") || url.includes("cbp2n1bqdyc")) {
                 return "Think different. Innovation that changes everything. The future is here.";
-              } else if (url.includes("coca") || url.includes("coke")) {
+              } else if (url.includes("coca") || url.includes("coke") || url.includes("5sdo4ymwvfq")) {
                 return "Taste the feeling. Open happiness. Share a Coke with the world.";
-              } else if (url.includes("pepsi")) {
+              } else if (url.includes("pepsi") || url.includes("po0jy4wvcic")) {
                 return "For the love of it. That's what I like. Pepsi generation.";
-              } else if (url.includes("adidas")) {
+              } else if (url.includes("adidas") || url.includes("lza-57h64ke")) {
                 return "Impossible is nothing. All in or nothing. Create the new.";
-              } else if (url.includes("mcdon")) {
+              } else if (url.includes("mcdon") || url.includes("ewmashzewc")) {
                 return "I'm lovin' it. Good times great taste. You deserve a break today.";
-              } else if (url.includes("toyota")) {
+              } else if (url.includes("toyota") || url.includes("zswn")) {
                 return "Let's go places. Built for the way you live. The best built cars in the world.";
-              } else if (url.includes("samsung")) {
+              } else if (url.includes("samsung") || url.includes("zi-pux4uaqm")) {
                 return "Do what you can't. Next is now. Designed for humans.";
               } else {
                 return "You can't stop us. Together we rise. This is more than sport. This is unity.";
