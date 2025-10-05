@@ -114,7 +114,26 @@ export async function POST(request: NextRequest) {
 
     // For demo purposes, return mock data if API key not set
     if (!process.env.TWELVELABS_API_KEY) {
-      console.log("TwelveLabs API key not set, returning mock data");
+      console.log("TwelveLabs API key not set, returning mock data for:", videoUrl);
+      
+      // Generate different mock text based on URL
+      let mockText = "You can't stop us. Together we rise. This is more than sport. This is unity.";
+      
+      if (videoUrl.includes("apple") || videoUrl.toLowerCase().includes("iphone")) {
+        mockText = "Think different. Innovation that changes everything. The future is here.";
+      } else if (videoUrl.includes("coca") || videoUrl.includes("coke")) {
+        mockText = "Taste the feeling. Open happiness. Share a Coke with the world.";
+      } else if (videoUrl.includes("pepsi")) {
+        mockText = "For the love of it. That's what I like. Pepsi generation.";
+      } else if (videoUrl.includes("adidas")) {
+        mockText = "Impossible is nothing. All in or nothing. Create the new.";
+      } else if (videoUrl.includes("mcdon")) {
+        mockText = "I'm lovin' it. Good times great taste. You deserve a break today.";
+      } else if (videoUrl.includes("toyota")) {
+        mockText = "Let's go places. Built for the way you live. The best built cars in the world.";
+      } else if (videoUrl.includes("samsung")) {
+        mockText = "Do what you can't. Next is now. Designed for humans.";
+      }
       
       return NextResponse.json({
         success: true,
@@ -143,7 +162,7 @@ export async function POST(request: NextRequest) {
             },
           ],
           voiceover: {
-            text: "You can't stop us. Together we rise. This is more than sport. This is unity.",
+            text: mockText,
             language: "en-US",
             emotion: "inspirational",
           },
