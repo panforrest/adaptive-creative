@@ -1,5 +1,8 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate, Sequence, Video, staticFile} from 'remotion';
+import {AnimatedBackground} from './components/AnimatedBackground';
+import {CulturalOverlay} from './components/CulturalOverlay';
+import {AudioTrack} from './components/AudioTrack';
 
 interface MarketVariantProps {
   marketCode: string;
@@ -53,8 +56,8 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
       }}
     >
       {/* Background Video Layer */}
-      <AbsoluteFill>
-        {hasVideo ? (
+      {hasVideo ? (
+        <AbsoluteFill>
           <Video
             src={staticFile('sample-ad.mp4')}
             style={{
@@ -63,35 +66,10 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
               objectFit: 'cover',
             }}
           />
-        ) : (
-          // Animated gradient background as placeholder
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              background: `linear-gradient(${45 + frame * 0.5}deg, #667eea 0%, #764ba2 50%, #f093fb 100%)`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <div
-              style={{
-                fontSize: 32,
-                color: 'rgba(255,255,255,0.3)',
-                textAlign: 'center',
-                padding: 40,
-              }}
-            >
-              Source Video Placeholder
-              <br />
-              <span style={{fontSize: 20}}>
-                (In production: Original ad video plays here)
-              </span>
-            </div>
-          </div>
-        )}
-      </AbsoluteFill>
+        </AbsoluteFill>
+      ) : (
+        <AnimatedBackground marketCode={marketCode} />
+      )}
 
       {/* Color Grading Filter Overlay */}
       <AbsoluteFill
@@ -104,32 +82,7 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
       />
 
       {/* Cultural Overlay Effects */}
-      {marketCode === 'SA' && (
-        <AbsoluteFill
-          style={{
-            background: 'radial-gradient(circle, transparent 60%, rgba(139, 69, 19, 0.2) 100%)',
-            pointerEvents: 'none',
-          }}
-        />
-      )}
-      
-      {marketCode === 'JP' && (
-        <AbsoluteFill
-          style={{
-            background: 'linear-gradient(to bottom, rgba(255, 182, 193, 0.1) 0%, transparent 50%)',
-            pointerEvents: 'none',
-          }}
-        />
-      )}
-      
-      {marketCode === 'IN' && (
-        <AbsoluteFill
-          style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(255, 140, 0, 0.15) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }}
-        />
-      )}
+      <CulturalOverlay marketCode={marketCode} />
 
       {/* Market Title */}
       <Sequence from={0} durationInFrames={900}>
@@ -229,6 +182,9 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
           {marketCode}
         </div>
       </AbsoluteFill>
+      
+      {/* Audio Track */}
+      <AudioTrack marketCode={marketCode} />
     </AbsoluteFill>
   );
 };
