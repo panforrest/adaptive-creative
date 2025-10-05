@@ -59,7 +59,7 @@ export default function Dashboard({ videoUrl, onBack }: DashboardProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [analysis, setAnalysis] = useState<VideoAnalysis | null>(null);
-  const [selectedMarkets, setSelectedMarkets] = useState<string[]>(["JP", "SA", "IN"]);
+  const [selectedMarkets, setSelectedMarkets] = useState<string[]>([]);
   const [variants, setVariants] = useState<MarketVariant[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
 
