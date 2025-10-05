@@ -98,26 +98,9 @@ export async function POST(request: NextRequest) {
     console.log(`🎬 Starting video render for market: ${marketCode}`);
     console.log(`📝 Original text: "${originalText}"`);
 
-    // Generate voiceover if ElevenLabs is configured
-    if (process.env.ELEVENLABS_API_KEY && originalText) {
-      try {
-        console.log(`🎙️ Generating voiceover for ${marketCode}...`);
-        const voiceResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/generate-voiceover`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ marketCode, text: originalText }),
-        });
-        
-        if (voiceResponse.ok) {
-          const voiceData = await voiceResponse.json();
-          console.log(`✅ Voiceover generated: ${voiceData.audioUrl}`);
-        } else {
-          console.log(`⚠️ Voiceover generation failed, continuing without audio`);
-        }
-      } catch (voiceError) {
-        console.log(`⚠️ Voiceover error:`, voiceError);
-      }
-    }
+    // Note: Voiceover generation happens separately via /api/generate-voiceover
+    // Audio files should already exist in /public/voiceover/ before rendering
+    console.log(`📢 Looking for voiceover file: /public/voiceover/${marketCode}-voiceover.mp3`);
 
     // Create output directory if it doesn't exist
     const outputDir = path.join(process.cwd(), "public", "videos");
