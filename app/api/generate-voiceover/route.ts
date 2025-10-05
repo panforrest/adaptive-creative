@@ -31,12 +31,29 @@ const VOICE_SETTINGS: Record<string, any> = {
   MX: { stability: 0.6, similarity_boost: 0.9, style: 0.7 },
 };
 
+// Market-specific translations for common phrases
+const TRANSLATIONS: Record<string, Record<string, string>> = {
+  JP: {
+    "Think different. Innovation that changes everything. The future is here.": "違う考え方をしよう。すべてを変えるイノベーション。未来はここにある。",
+    "Impossible is nothing. All in or nothing. Create the new.": "不可能なことは何もない。全力か無か。新しいものを創造する。",
+    "You can't stop us. Together we rise. This is more than sport. This is unity.": "私たちを止めることはできない。共に立ち上がる。これはスポーツ以上のもの。これは団結だ。",
+    "Taste the feeling. Open happiness. Share a Coke with the world.": "この感覚を味わおう。幸せを開こう。世界とコーラを分かち合おう。",
+  },
+  // Add more markets as needed
+};
+
 export async function POST(request: NextRequest) {
   try {
     const { marketCode, text } = await request.json();
 
     console.log(`🎙️ Generating voiceover for ${marketCode}...`);
     console.log(`📝 Original text: "${text}"`);
+
+    // Translate text if available
+    const translatedText = TRANSLATIONS[marketCode]?.[text] || text;
+    if (translatedText !== text) {
+      console.log(`🌐 Translated to: "${translatedText}"`);
+    }
 
     const apiKey = process.env.ELEVENLABS_API_KEY;
 
@@ -59,8 +76,7 @@ export async function POST(request: NextRequest) {
     console.log(`   Voice ID: ${voiceId}`);
     console.log(`   Voice Settings:`, voiceSettings);
 
-    // For hackathon demo: Use English text with market-specific voice characteristics
-    // In production: Would translate text to target language first
+    // Use multilingual model to support translated text
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
       {
@@ -71,8 +87,8 @@ export async function POST(request: NextRequest) {
           "xi-api-key": apiKey,
         },
         body: JSON.stringify({
-          text,
-          model_id: "eleven_monolingual_v1", // Use monolingual for consistent English
+          text: translatedText, // Use translated text
+          model_id: "eleven_multilingual_v2", // Multilingual model for Japanese
           voice_settings: voiceSettings,
         }),
       }
