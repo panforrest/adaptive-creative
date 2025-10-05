@@ -8,22 +8,8 @@ interface VoiceoverTrackProps {
 }
 
 export const VoiceoverTrack: React.FC<VoiceoverTrackProps> = ({marketCode, text, voiceoverUrl}) => {
-  // Check if we should load voiceover
-  // Only enable for markets where we've generated audio
-  const hasVoiceover = voiceoverUrl || marketCode === 'JP';
-  
-  if (!hasVoiceover) {
-    return null;
-  }
-  
-  // Use provided URL or construct from marketCode
-  const audioSrc = voiceoverUrl || staticFile(`voiceover/${marketCode}-voiceover.mp3`);
-  
-  return (
-    <Audio
-      src={audioSrc}
-      volume={0.8}
-      startFrom={0}
-    />
-  );
+  // Voice disabled for stable hackathon demo
+  // Voice generation API works separately at /api/generate-voiceover
+  // Integration with Remotion video requires additional time
+  return null;
 };
