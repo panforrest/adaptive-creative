@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
     const { marketCode, text } = await request.json();
 
     console.log(`🎙️ Generating voiceover for ${marketCode}...`);
+    console.log(`📝 Original text: "${text}"`);
 
     const apiKey = process.env.ELEVENLABS_API_KEY;
 
@@ -53,12 +54,13 @@ export async function POST(request: NextRequest) {
 
     // Real ElevenLabs API integration
     const voiceId = process.env.ELEVENLABS_VOICE_ID || "21m00Tcm4TlvDq8ikWAM";
-    const languageCode = LANGUAGE_CODES[marketCode] || "en";
     const voiceSettings = VOICE_SETTINGS[marketCode] || VOICE_SETTINGS.US;
 
-    console.log(`   Language: ${languageCode}`);
     console.log(`   Voice ID: ${voiceId}`);
+    console.log(`   Voice Settings:`, voiceSettings);
 
+    // For hackathon demo: Use English text with market-specific voice characteristics
+    // In production: Would translate text to target language first
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
       {
@@ -70,9 +72,8 @@ export async function POST(request: NextRequest) {
         },
         body: JSON.stringify({
           text,
-          model_id: "eleven_multilingual_v2",
+          model_id: "eleven_monolingual_v1", // Use monolingual for consistent English
           voice_settings: voiceSettings,
-          language_code: languageCode,
         }),
       }
     );
