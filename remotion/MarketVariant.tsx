@@ -5,6 +5,8 @@ import {CulturalOverlay} from './components/CulturalOverlay';
 import {AudioTrack} from './components/AudioTrack';
 import {BackgroundMusic} from './components/BackgroundMusic';
 import {VoiceoverTrack} from './components/VoiceoverTrack';
+import {TransitionEffects} from './components/TransitionEffects';
+import {AnimatedText} from './components/AnimatedText';
 
 interface MarketVariantProps {
   marketCode: string;
@@ -85,6 +87,9 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
 
       {/* Cultural Overlay Effects */}
       <CulturalOverlay marketCode={marketCode} />
+      
+      {/* Opening Transition */}
+      <TransitionEffects marketCode={marketCode} />
 
       {/* Market Title */}
       <Sequence from={0} durationInFrames={900}>
@@ -95,18 +100,17 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
             padding: 60,
           }}
         >
-          <div
+          <AnimatedText
+            text={`${marketName} Market Variant`}
+            marketCode={marketCode}
+            startFrame={0}
             style={{
               fontSize: 48,
               fontWeight: 'bold',
               color: 'white',
-              opacity,
-              transform: `translateY(${titleY}px)`,
               textAlign: 'center',
             }}
-          >
-            {marketName} Market Variant
-          </div>
+          />
         </AbsoluteFill>
       </Sequence>
 
@@ -119,7 +123,10 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
             padding: 100,
           }}
         >
-          <div
+          <AnimatedText
+            text={originalText}
+            marketCode={marketCode}
+            startFrame={60}
             style={{
               fontSize: 72,
               fontWeight: 'bold',
@@ -129,9 +136,7 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
               maxWidth: '80%',
               lineHeight: 1.4,
             }}
-          >
-            {originalText}
-          </div>
+          />
         </AbsoluteFill>
       </Sequence>
 
