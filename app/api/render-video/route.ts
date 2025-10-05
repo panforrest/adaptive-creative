@@ -96,6 +96,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`🎬 Starting video render for market: ${marketCode}`);
+    console.log(`📝 Original text: "${originalText}"`);
 
     // Create output directory if it doesn't exist
     const outputDir = path.join(process.cwd(), "public", "videos");

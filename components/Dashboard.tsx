@@ -275,7 +275,9 @@ export default function Dashboard({ videoUrl, onBack }: DashboardProps) {
       // Show loading state
       alert(`Rendering video for ${variant.market}... This will take 2-5 minutes. Check console for progress.`);
       
+      const textToRender = analysis?.voiceover.text || "You can't stop us. Together we rise.";
       console.log(`🎬 Requesting video render for ${variant.market} (${marketCode})`);
+      console.log(`📝 Text to render: "${textToRender}"`);
       
       // Call the render API
       const response = await fetch("/api/render-video", {
