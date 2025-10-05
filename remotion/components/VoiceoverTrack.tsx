@@ -1,14 +1,23 @@
 import React from 'react';
-import {Audio, staticFile} from 'remotion';
+import {Audio} from 'remotion';
 
 interface VoiceoverTrackProps {
   marketCode: string;
   text: string;
+  voiceoverUrl?: string;
 }
 
-export const VoiceoverTrack: React.FC<VoiceoverTrackProps> = ({marketCode, text}) => {
-  // Voiceover disabled for hackathon demo
-  // Voice generation works (see /api/generate-voiceover)
-  // Integration with Remotion requires additional configuration
-  return null;
+export const VoiceoverTrack: React.FC<VoiceoverTrackProps> = ({marketCode, text, voiceoverUrl}) => {
+  // If voiceover URL is provided, use it
+  if (!voiceoverUrl) {
+    return null;
+  }
+  
+  return (
+    <Audio
+      src={voiceoverUrl}
+      volume={0.8}
+      startFrom={0}
+    />
+  );
 };

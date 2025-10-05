@@ -13,6 +13,7 @@ interface MarketVariantProps {
   marketName: string;
   modifications: string[];
   originalText: string;
+  voiceoverUrl?: string;
 }
 
 export const MarketVariant: React.FC<MarketVariantProps> = ({
@@ -20,6 +21,7 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
   marketName,
   modifications,
   originalText,
+  voiceoverUrl,
 }) => {
   const frame = useCurrentFrame();
   
@@ -192,7 +194,7 @@ export const MarketVariant: React.FC<MarketVariantProps> = ({
       
       {/* Audio Tracks */}
       <BackgroundMusic marketCode={marketCode} />
-      <VoiceoverTrack marketCode={marketCode} text={originalText} />
+      <VoiceoverTrack marketCode={marketCode} text={originalText} voiceoverUrl={voiceoverUrl} />
       <AudioTrack marketCode={marketCode} />
     </AbsoluteFill>
   );

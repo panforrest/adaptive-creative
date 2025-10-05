@@ -98,9 +98,29 @@ export async function POST(request: NextRequest) {
     console.log(`🎬 Starting video render for market: ${marketCode}`);
     console.log(`📝 Original text: "${originalText}"`);
 
-    // Note: Voiceover generation happens separately via /api/generate-voiceover
-    // Audio files should already exist in /public/voiceover/ before rendering
-    console.log(`📢 Looking for voiceover file: /public/voiceover/${marketCode}-voiceover.mp3`);
+    // Generate voiceover first
+    let voiceoverPath: string | undefined;
+    if (process.env.ELEVENLABS_API_KEY && originalText) {
+      try {
+        console.log(`🎙️ Generating voiceover for ${marketCode}...`);
+        
+        // Call voiceover generation directly
+        const voiceResponse = await fetch('http://localhost:3000/api/generate-voiceover', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ marketCode, text: originalText }),
+        });
+        
+        if (voiceResponse.ok) {
+          const voiceData = await voiceResponse.json();
+          // Use absolute file path
+          voiceoverPath = path.join(process.cwd(), 'public', voiceData.audioUrl);
+          console.log(`✅ Voiceover generated: ${voiceoverPath}`);
+        }
+      } catch (error) {
+        console.log(`⚠️ Voiceover generation failed:`, error);
+      }
+    }
 
     // Create output directory if it doesn't exist
     const outputDir = path.join(process.cwd(), "public", "videos");
@@ -125,6 +145,7 @@ export async function POST(request: NextRequest) {
         marketName: MARKET_NAMES[marketCode] || marketCode,
         modifications: MARKET_MODIFICATIONS[marketCode] || [],
         originalText: originalText || "You can't stop us. Together we rise.",
+        voiceoverUrl: voiceoverPath,
       },
     });
 
@@ -143,6 +164,7 @@ export async function POST(request: NextRequest) {
         marketName: MARKET_NAMES[marketCode] || marketCode,
         modifications: MARKET_MODIFICATIONS[marketCode] || [],
         originalText: originalText || "You can't stop us. Together we rise.",
+        voiceoverUrl: voiceoverPath,
       },
     });
 
