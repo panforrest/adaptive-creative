@@ -1,0 +1,7 @@
+Place a sample video file here named: sample-ad.mp4
+
+For testing, you can use any MP4 video file (30 seconds recommended).
+
+If you don't have one, we'll use a placeholder gradient background.
+
+The app will look for: /public/sample-ad.mp4
